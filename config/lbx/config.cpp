@@ -32,18 +32,18 @@ GpioButtonMapping button_mappings[] = {
 
     { &InputState::start,       A5},
 
-    { &InputState::c_left,      4 },
+    { &InputState::c_left,      1 },
     { &InputState::c_up,        8 },
-    { &InputState::c_down,      1 },
+    { &InputState::c_down,      4 },
     { &InputState::a,           12},
     { &InputState::c_right,     6 },
 
-    { &InputState::b,           13},
+    { &InputState::b,           A0},
     { &InputState::x,           5 },
     { &InputState::z,           10},
     { &InputState::up,          9 },
 
-    { &InputState::r,           A0},
+    { &InputState::r,           13},
     { &InputState::y,           A1},
     { &InputState::lightshield, A2},
     { &InputState::midshield,   A3},
@@ -100,7 +100,8 @@ void setup() {
     digitalWrite(pinout.mux, LOW);
     brook_mode = false;
 
-    CommunicationBackend *primary_backend = new DInputBackend(input_sources, input_source_count, !button_holds.a);
+    CommunicationBackend *primary_backend =
+        new DInputBackend(input_sources, input_source_count, !button_holds.a);
     delay(500);
     bool usb_connected = UDADDR & _BV(ADDEN);
 
@@ -144,9 +145,10 @@ void setup() {
     }
 
     // Default to Melee mode.
-    primary_backend->SetGameMode(
-        new Melee20Button(socd::SOCD_2IP_NO_REAC, { .crouch_walk_os = use_crouchwalk, .teleport_coords = use_teleport })
-    );
+    primary_backend->SetGameMode(new Melee20Button(
+        socd::SOCD_2IP_NO_REAC,
+        { .crouch_walk_os = use_crouchwalk, .teleport_coords = use_teleport }
+    ));
 }
 
 void loop() {
